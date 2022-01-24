@@ -197,21 +197,25 @@ Author URI: https://legacy.hr
          $res   = sanitize_text_field($_POST["cf-res"]);
          $reza   = sanitize_text_field($_POST["skrito"]); 
 
-            $to = 'email_adresa';
-            $subject = "Novi član";
-            $headers = "From: $ime <$email>" . "\r\n". "Reply-To: <$email>" . "\r\n";
+            $to = 'borajski@gmail.com';
+            $subject = "Učlanjenje u PLK Adamas";
+            $headers1 = "From: $ime <$email>" . "\r\n". "Reply-To: <$email>" . "\r\n";
+            $headers2 = "From: 'PLK Adamas' <$to>" . "\r\n". "Reply-To: <$to>" . "\r\n";
             // $headers = array('Content-Type: text/html; charset=UTF-8');
             $content_type = function() { return 'text/html'; };
             add_filter( 'wp_mail_content_type', $content_type );
             ob_start();
             include('email_template.php');
             $poruka = ob_get_contents();
+            include('email_to_sender.html');
+            $poruka_sender = ob_get_contents();
             ob_end_clean();
-            $attachments = array( WP_CONTENT_DIR  .'link_iz_galerije' );
+            $attachments = array( WP_CONTENT_DIR  .'/uploads/2022/01/uclanjenje.pdf' );
             if ($res == $reza) {
          
                 // If email has been process for sending, display a success message
-                if (wp_mail($to, $subject, $poruka, $headers,$attachments)) {
+                if ((wp_mail($email, $subject, $poruka_sender, $headers2,$attachments)) && (wp_mail($to, $subject, $poruka, $headers1)))
+                {
                     if (isset($_POST["ime"])) {
                         unset($_POST["ime"]);
                      }
