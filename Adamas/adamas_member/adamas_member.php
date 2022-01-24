@@ -197,92 +197,45 @@ Author URI: https://legacy.hr
          $res   = sanitize_text_field($_POST["cf-res"]);
          $reza   = sanitize_text_field($_POST["skrito"]); 
 
-         $before = '<html>
-<head>
-<meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  <title>ÄŚlanstvo</title> <link href="https://fonts.googleapis.com/css?family=Nunito:400|Arimo:400&amp;display=swap" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-</head>
-<body>
- <section>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="lc-block text-center pt-4"> <img class="img-fluid" src="https://gmax.hr/wp-content/uploads/2022/01/logo.svg" srcset="" sizes="" alt="PLK Adamas Vukovar" style="height: 10rem;"></div><!-- /lc-block -->
-				<div class="lc-block text-center">
-					<div editable="rich">
-					<p class="rfs-7"><strong class="rfs-7"> POWERLIFTING KLUB â€łADAMASâ€ł</strong><br>Eugena Kvaternika 58, VUKOVAR<br><small> MB: 4267184 OIB: 25041251600 <br>IBAN: HR8824020061100800034</small> <br>Web: <a href="https://www.powerlifting-adamas.hr">https://www.powerlifting-adamas.hr</a><br>e-mail: <a href="mailto:powerliftingadamas@gmail.com">powerliftingadamas@gmail.com</a>
-						</p>
-					</div>
-				</div><!-- /lc-block -->
-				<div class="lc-block text-center mt-5 mb-4">
-					<div editable="rich">
-						<h1 class="rfs-12"><strong class="">UÄŤlanjenje u Powerlifting klub â€śAdamasâ€ť, Vukovar</strong></h1>
-					</div>
-				</div><!-- /lc-block -->
-				<!-- /lc-block -->
-			</div><!-- /col -->
-		</div>
-	</div>
-</section><body>';
-$after = '<section>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12 offset-md-1 mb-5 mt-5">
-			<div class="lc-block">
-							<div editable="rich">
-								<p><em> Izjavljujem da prihvaÄ‡am <a href="/statut" target="_blank">Statut kluba</a> i dajem suglasnost da se moje fotografije i snimke s treninga i natjecanja mogu objavljivati i koristiti za promociju PLK â€žAdamasâ€ś i sporta powerliftinga, te da sudjelujem na natjecanjima na vlastitu odgovornost i slobodnom voljom.&nbsp;</em></p>
-							</div>
-						</div><!-- /lc-block -->
-						<div class="lc-block pt-5">
-						<table border=0 width=900>
-						<tr>
-							<td width=150>Mjesto i datum:</td>
-							<td width=250>_________________________</td>
-							<td width=100></td>
-							<td width=100>Potpis:</td>
-							<td width=300>_________________________</td>
-						</tr>
-					</table>
-					<br><br>
-					<table border=0 width=900>
-						<tr>
-							<td width=400>
-								Potpis (za maloljetne roditelj/skrbnik):<br><br>____________________________________________
-							</td>
-							<td width=300>
-							</td>
-								<td width=100></td>
-							<td width=100></td>
-							<td width=300></td>
-						</tr>
-					</table>
-					</div><!-- /lc-block -->
-			</div><!-- /col -->
-		</div>
-	</div>
-</section> <script src="https://cdn.jsdelivr.net/npm/bootstrap.native@3.0.0/dist/bootstrap-native.min.js"></script> </body></html>';
-
-
-            $to = 'borajski@gmail.com';
-            $subject = "Poruka s web stranice";
-            $body = $before.'<table border=0 align=left width=800>
-            <tr><td>Ime : </td><td>'.$ime.'</td></tr>
-            <tr><td>Ime jednog roditelja : </td><td>'.$ime_rod.'</td></tr>
-            <tr><td>Prezime : </td><td>'.$prezime.'</td></tr>
-            <tr><td>Datum roÄ‘enja : </td><td>'.$datum.'</td></tr>
-            <tr><td>Mjesto roÄ‘enja : </td><td>'.$mjesto.'</td></tr>
-            <tr><td>Email : </td><td>'.$email.'</td></tr>
-            <tr><td>Kontakt broj : </td><td>'.$mob.'</td></tr>
-            </table>'.$after;
-
-            //$headers = "From: $ime <$email>" . "\r\n". "Reply-To: <$email>" . "\r\n";
-            $headers = array('Content-Type: text/html; charset=UTF-8');
+            $to = 'email_adresa';
+            $subject = "Novi član";
+            $headers = "From: $ime <$email>" . "\r\n". "Reply-To: <$email>" . "\r\n";
+            // $headers = array('Content-Type: text/html; charset=UTF-8');
+            $content_type = function() { return 'text/html'; };
+            add_filter( 'wp_mail_content_type', $content_type );
+            ob_start();
+            include('email_template.php');
+            $poruka = ob_get_contents();
+            ob_end_clean();
+            $attachments = array( WP_CONTENT_DIR  .'link_iz_galerije' );
             if ($res == $reza) {
+         
                 // If email has been process for sending, display a success message
-                if (wp_mail($to, $subject, $body, $headers)) {
+                if (wp_mail($to, $subject, $poruka, $headers,$attachments)) {
                     if (isset($_POST["ime"])) {
                         unset($_POST["ime"]);
-                    }
+                     }
+                     if (isset($_POST["ime_rod"])) {
+                        unset($_POST["ime_rod"]);
+                     }
+                     if (isset($_POST["prezime"])) {
+                        unset($_POST["prezime"]);
+                     }
+                     if (isset($_POST["mjesto"])) {
+                        unset($_POST["mjesto"]);
+                     }
+                     if (isset($_POST["datum"])) {
+                        unset($_POST["datum"]);
+                     }
+                     if (isset($_POST["mob"])) {
+                        unset($_POST["mob"]);
+                     }
+                     if (isset($_POST["cf-res"])) {
+                        unset($_POST["cf-res"]);
+                     }
+                     if (isset($_POST["skrito"])) {
+                        unset($_POST["skrito"]);
+                     }
                     if (isset($_POST["email"])) {
                         unset($_POST["email"]);
                     }
@@ -308,7 +261,7 @@ if ( window.history.replaceState ) {
             }
 		  }
           
-          
+          remove_filter( 'wp_mail_content_type', $content_type );
     
     }
 function am_shortcode()

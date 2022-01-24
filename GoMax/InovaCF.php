@@ -187,6 +187,12 @@ Author URI: https://legacy.hr
                     if (isset($_POST["cf-email"])) {
                         unset($_POST["cf-email"]);
                     }
+                       if (isset($_POST["cf-res"])) {
+                        unset($_POST["cf-res"]);
+                     }
+                     if (isset($_POST["skrito"])) {
+                        unset($_POST["skrito"]);
+                     }
                     if (isset($_POST["cf-message"])) {
                         unset($_POST["cf-message"]);
                     }
