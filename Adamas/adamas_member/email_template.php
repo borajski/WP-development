@@ -1,8 +1,10 @@
-<h2><strong>Učlanjenje u PLK Adamas</strong></h2>
-<h4><strong>Ime : <?php echo $ime; ?></strong></h4>
-<h4><strong>Ime jednog roditelja : <?php echo $ime_rod; ?></strong></h4>
-<h4><strong>Prezime : <?php echo $prezime; ?></strong></h4>
-<h4><strong>Datum rođenja : <?php echo $datum; ?></strong></h4>
-<h4><strong>Mjesto rođenja : <?php echo $mjesto; ?></strong></h4>
-<h4><strong>Email : <?php echo $email; ?></strong></h4>
-<h4><strong>Kontakt broj : <?php echo $mob; ?></strong></h4>
+<?php
+echo '<h2><strong>Učlanjenje u PLK Adamas</strong></h2>
+<h4><strong>Ime : '. $ime.'</strong></h4>
+<h4><strong>Ime jednog roditelja : '. $ime_rod.'</strong></h4>
+<h4><strong>Prezime : '. $prezime.'</strong></h4>
+<h4><strong>Datum rođenja : '. $datum.'</strong></h4>
+<h4><strong>Mjesto rođenja : '. $mjesto.'</strong></h4>
+<h4><strong>Email : '. $email.'</strong></h4>
+<h4><strong>Kontakt broj : '.$mob.'</strong></h4>';
+?>

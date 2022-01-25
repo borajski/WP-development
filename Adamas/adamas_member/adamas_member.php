@@ -181,6 +181,7 @@ Author URI: https://legacy.hr
         echo '<input type="hidden" name="skrito" value="'.$reza.'">';
     }
      //
+     add_filter( 'wp_mail', 'posalji_mail' );
     function posalji_mail()
     {
 
@@ -207,15 +208,18 @@ Author URI: https://legacy.hr
             ob_start();
             include('email_template.php');
             $poruka = ob_get_contents();
+            //$poruka = "netko se prijavio";
             include('email_to_sender.html');
             $poruka_sender = ob_get_contents();
-            ob_end_clean();
+             ob_end_clean();
             $attachments = array( WP_CONTENT_DIR  .'/uploads/2022/01/uclanjenje.pdf' );
             if ($res == $reza) {
-         
-                // If email has been process for sending, display a success message
-                if ((wp_mail($email, $subject, $poruka_sender, $headers2,$attachments)) && (wp_mail($to, $subject, $poruka, $headers1)))
+                unset($_POST["cf-submitted"]);
+               wp_mail($to, $subject, $poruka, $headers1);
+              // If email has been process for sending, display a success message
+                if (wp_mail($email, $subject, $poruka_sender, $headers2,$attachments))
                 {
+                   
                     if (isset($_POST["ime"])) {
                         unset($_POST["ime"]);
                      }
@@ -250,6 +254,7 @@ if ( window.history.replaceState ) {
 }
 </script>';
                     echo '<div>';
+                    echo $ispis;
                     echo '<p class="text2">Hvala na javljanju!</p>';
                     echo '</div>';
                 } else {
